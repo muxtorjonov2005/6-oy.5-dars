@@ -1,29 +1,36 @@
-import {useState, useEffect} from 'react'
-import axios from 'axios'
-import styles from './index.module.css'
-function OpenWeather() {
-    let [users, setUsers] = useState([])
+import { useState, useEffect } from 'react';
+import styles from './index.module.css';
+import axios from 'axios';
 
-    useEffect(() => {
-        axios.get("https://api.openweathermap.org")
-         .then(response => {    
-            console.log(response.date);
-                  
-            if (response.status == 200) {                
-                setUsers(response.data)
-            }
-          })
-         .catch(error => {
-            console.log(error)
-          })
-    }, [])
+function GetPokemon() {
+  const [pokemonList, setPokemonList] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+
+  useEffect(() => {
+    axios.get('https://api.openweathermap.org')
+    .then(response => {
+      console.log(response);
+      
+      if(response.status === 200) {
+        setLoading(true);
+        setPokemonList(response.data.results);
+      }
+      
+    })
+  }, []);
 
   return (
-    <div className={styles.container}>
-        <h3>Weather Information</h3>
-            
-    </div>
-  )
-}
+    <div>
+      {loading && pokemonList.map((pokemon, index) => (
+        <div key={index} className={styles.pokemon}>
+          <h2>{pokemon.name}</h2>
+          
+        </div>
+      ))}
 
-export default OpenWeather
+    </div>
+  );
+};
+
+export default GetPokemon;
